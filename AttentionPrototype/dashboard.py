@@ -49,15 +49,15 @@ software_categories = {
 
 # 1. Página de Configuração de Preferências
 def configure_preferences():
-    st.title("Configuração de Preferências")
+    st.title("Preference Settings")
     st.markdown(
         """
         <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
-            <p style="font-size: 13px; margin: 10px 0;">Nesta página, você pode:</p>
+            <p style="font-size: 13px; margin: 10px 0;">On this page, you can:</p>
             <ul style="font-size: 13px; padding-left: 20px;">
-                <li>Selecionar os softwares que considera úteis para trabalho ou estudo (<b>Foco Atencional</b>).</li>
-                <li>Configurar o uso de <b>fones de ouvido</b> e definir como a <b>música</b> afeta sua concentração.</li>
-                <li>A disposição dos seus monitores para melhorar a análise da <b>posição da cabeça</b>.</li>
+                <li>Select the software applications you consider useful for work or study (<b>Attentional Focus</b>).</li>
+                <li>Configure headphone use and define how <b>music</b> affects your concentration.</li>
+                <li>Configure your monitor arrangement to improve the analysis of <b>head position</b>.</li>
             </ul>
         </div>
         """,
@@ -68,8 +68,8 @@ def configure_preferences():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("Seleção de Ferramentas")
-        st.write("Selecione os softwares, classificados por categoria, que você considera úteis para trabalho ou estudo:")
+        st.subheader("Tools Selection")
+        st.write("Select the software applications, organized by category, that you consider useful for work or study:")
         focus_apps = []
         for category, details in software_categories.items():
             st.markdown(f"<p style='color: #000000; font-size: 15px; font-weight: bold;'>{category}</p>", unsafe_allow_html=True)
@@ -78,34 +78,34 @@ def configure_preferences():
         
     
     with col2:
-        st.subheader("Domínios de Sites")
-        st.write("Se você usa o Safari para trabalho ou estudo, adicione os domínios permitidos abaixo (exemplo: openai.com, google.com).")
-        focus_urls = st.text_area("Digite os domínios separados por vírgula:", "").split(",")
+        st.subheader("Website Domains")
+        st.write("If you use Safari for work or study, add the allowed domains below (e.g., openai.com, google.com).")
+        focus_urls = st.text_area("Enter domains separated by commas:", "").split(",")
         
         st.markdown("<br><br>", unsafe_allow_html=True)  # Quebras de linha
 
-        st.subheader("Contexto")
-        is_using_headphones = st.checkbox("Estou usando fone de ouvido", value=False)
+        st.subheader("Context")
+        is_using_headphones = st.checkbox("I am using headphones", value=False)
         music_preference = st.radio(
-            "Como a música afeta seu foco?",
-            options=["Me ajuda a concentrar", "Me distrai", "Não afeta meu foco"],
+            "How does music affect your focus?",
+            options=["It helps me concentrate", "It distracts me", "It does not affect my focus"],
             index=2
         )
 
         st.markdown("<br><br>", unsafe_allow_html=True)  # Quebras de linha
     
-        st.subheader("Monitores")
-        num_monitors = st.number_input("Quantos monitores você utiliza?", min_value=1, max_value=3, step=1, value=1)
+        st.subheader("Monitors")
+        num_monitors = st.number_input("How many monitors do you use?", min_value=1, max_value=3, step=1, value=1)
         monitor_positions = {}
         for i in range(1, num_monitors + 1):
-            position = st.selectbox(f"Posição do Monitor {i}:", ["Frente", "Esquerda", "Direita", "Acima"], key=f"monitor-{i}")
+            position = st.selectbox(f"Posição do Monitor {i}:", ["Front", "Left", "Right", "Above"], key=f"monitor-{i}")
             monitor_positions[f"Monitor {i}"] = position
         st.markdown("<br>", unsafe_allow_html=True)  # Quebras de linha
     
     # Botão para salvar as preferências (fora das colunas para centralizar)
     col1_center, col2_center, col3_center = st.columns(3)
     with col2_center:
-        if st.button("Salvar Preferências"):
+        if st.button("Save Preferences"):
             preferences = {
                 "Monitores": monitor_positions,
                 "Foco": focus_apps,
@@ -117,16 +117,15 @@ def configure_preferences():
             }
             with open("user_preferences.json", "w") as f:
                 json.dump(preferences, f, indent=4)
-            st.success("Preferências salvas com sucesso!")
+            st.success("Preferences saved successfully!")
 
 
 
 
 # 2. Página para Iniciar a Coleta de Dados
 def start_data_collection():
-    st.title("Iniciar/Parar Coleta de Dados")
-    #st.write("Clique nos botões abaixo para iniciar ou parar o processo de coleta de dados.")
-    st.write("Clique no botão abaixo para visualizar os dados de exemplo.")
+    st.title("Start/Stop Data Collection")
+    st.write("Click the buttons below to start or stop the data collection process.")
 
     col1, col2 = st.columns(2)
 
@@ -134,15 +133,15 @@ def start_data_collection():
 
     # Botão para Iniciar Coleta
     with col1:
-        if st.button("Iniciar Coleta"):
+        if st.button("Start Collection"):
             csv_path = get_latest_csv()  # Obtém o arquivo CSV mais recente
 
 
     # Botão para Parar Coleta
     with col2:
-        if st.button("Parar Coleta"):
+        if st.button("Stop Collection"):
             if not os.path.exists(PID_FILE):
-                st.warning("Nenhuma coleta de dados em execução.")
+                st.warning("No data collection is currently running.")
             else:
                 try:
                     # Lê o PID do arquivo e encerra o processo
@@ -150,14 +149,14 @@ def start_data_collection():
                         pid = int(f.read())
                     os.kill(pid, signal.SIGTERM)  # Encerra o processo
                     os.remove(PID_FILE)  # Remove o arquivo PID
-                    st.success("Coleta de dados interrompida.")
+                    st.success("Data collection stopped.")
                 except Exception as e:
-                    st.error(f"Erro ao parar a coleta: {e}")
+                    st.error(f"Error stopping data collection: {e}")
 
 
     # Exibir os dados SOMENTE DEPOIS das colunas (fora delas)
     if csv_path:
-        st.success("Exemplo de dados carregado com sucesso!")
+        st.success("Example data loaded successfully!")
 
         try:
             # Carregar os dados do CSV
@@ -165,7 +164,7 @@ def start_data_collection():
 
             # Verifica se há dados no CSV antes de exibir
             if data.empty:
-                st.warning("O arquivo CSV está vazio. Nenhum dado disponível.")
+                st.warning("The CSV file is empty. No data available.")
             else:
                 # Exibir uma mensagem informando que os dados são um exemplo
                 #st.warning("Esses dados são um exemplo e não estão sendo coletados em tempo real.")
@@ -174,7 +173,7 @@ def start_data_collection():
                 st.dataframe(data, use_container_width=True, height=500)
 
         except Exception as e:
-            st.error(f"Erro ao carregar os dados: {e}")
+            st.error(f"Error loading data: {e}")
 
     else:
         # Verifica se já mostramos esse erro antes para evitar repetição
@@ -184,7 +183,7 @@ def start_data_collection():
 
 # 3. Página de Análise dos Dados
 def analyze_data():
-    st.title("Análise dos Dados Atencionais")
+    st.title("Attention Data Analysis")
     print("--------------------------------------------------------")
     print("DATA", datetime.datetime.now())
     print("--------------------------------------------------------")
@@ -198,7 +197,7 @@ def analyze_data():
 
     # Botão para iniciar análise
     with col1:
-        if st.button("Analisar Dados Recentes"):
+        if st.button("Analyze Recent Data"):
             st.session_state["show_graph"] = True  # Define variável de estado
             st.session_state["last_update"] = datetime.datetime.now().strftime('%H:%M:%S %d/%m/%Y')
 
@@ -209,11 +208,11 @@ def analyze_data():
                 """
                 <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
                     <p style="margin: auto; font-size: 16px; margin-left: -10px; margin-top: 5px;">
-                        📅 <strong>Última atualização:</strong> 
+                        📅 <strong>Last updated:</strong> 
                         {last_update}
                     </p>
                 </div>
-                """.format(last_update=st.session_state["last_update"] if st.session_state["last_update"] else "Dados ainda não analisados."),
+                """.format(last_update=st.session_state["last_update"] if st.session_state["last_update"] else "Data has not been analyzed yet."),
                 unsafe_allow_html=True
             )
 
@@ -284,11 +283,11 @@ def analyze_data():
                 # Criar tooltip com detalhes do bloco de tempo
                 detalhes = (
                     f"⏰ {timestamp.strftime('%H:%M:%S')}<br>"
-                    f"🎯 Estado: {estado}<br>"
-                    f"💻 Software Mais Usado: {data.iloc[i]['Software Mais Usado']}<br>"
-                    f"👀 Posição Mais Frequente: {data.iloc[i]['Posição Cabeça Mais Comum']}<br>"
-                    f"🔊 Som Predominante: {data.iloc[i]['Som Predominante']}<br>"
-                    f"🏷️ Tipo de Atenção: {tipo_atencao}"
+                    f"🎯 State: {estado}<br>"
+                    f"💻 Most Used Software: {data.iloc[i]['Software Mais Usado']}<br>"
+                    f"👀 Most Frequent Head Position: {data.iloc[i]['Posição Cabeça Mais Comum']}<br>"
+                    f"🔊 Predominant Sound: {data.iloc[i]['Som Predominante']}<br>"
+                    f"🏷️ Attention Type: {tipo_atencao}"
                 )
 
                 # Adicionar ponto ao gráfico com tooltip
@@ -305,9 +304,9 @@ def analyze_data():
 
             # Configurar layout do gráfico
             fig.update_layout(
-                title="Evolução da Atenção ao Longo do Tempo (Atualizado a cada 30 segundos)", #atualização a cada 30s
-                xaxis_title="Tempo",
-                yaxis_title="Estado de Atenção (%)",
+                title="Attention Over Time (Updated Every 30 Seconds)",
+                xaxis_title="Time",
+                yaxis_title="Attention Level (%)",
                 yaxis=dict(range=[0, 105]),  # Pequena margem extra para evitar corte no 100%
                 hovermode="closest",
                 template="plotly_white"
@@ -317,12 +316,12 @@ def analyze_data():
             st.markdown(
                 """
                 <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
-                    <h4 style="font-size: 16px;">Classificação dos Estados Atencionais</h4>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #1B9E77; font-weight: bold;">Atenção Sustentada:</span> Manutenção do foco em uma atividade por um período prolongado, sem interrupções significativas.</p>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #8DA0CB; font-weight: bold;">Atenção Alternada:</span> Habilidade de alternar o foco entre diferentes tarefas, mantendo a eficiência na execução.</p>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #FFD92F; font-weight: bold;">Atenção Seletiva:</span> Capacidade de concentrar-se em um estímulo específico, mesmo com distrações no ambiente.</p>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #66C2A5; font-weight: bold;">Atenção:</span> Estado de foco adequado na atividade principal, sem alternâncias frequentes ou interferências externas.</p>
-                    <p style="font-size: 13px;"><span style="color: #eb5f53; font-weight: bold;">Distração:</span> Perda de atenção devido a fatores externos ou dificuldades em manter o engajamento na tarefa em execução.</p>
+                    <h4 style="font-size: 16px;">Attention State Classification</h4>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #1B9E77; font-weight: bold;">Atenção Sustentada:</span> Maintaining focus on an activity over an extended period without significant interruptions.</p>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #8DA0CB; font-weight: bold;">Atenção Alternada:</span> The ability to shift focus between different tasks while maintaining efficiency.</p>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #FFD92F; font-weight: bold;">Atenção Seletiva:</span> The ability to focus on a specific stimulus despite distractions in the environment.</p>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #66C2A5; font-weight: bold;">Atenção:</span> An adequate level of focus on the main activity, without frequent shifts or external interference.</p>
+                    <p style="font-size: 13px;"><span style="color: #eb5f53; font-weight: bold;">Distração:</span> Loss of attention due to external factors or difficulty maintaining engagement in the ongoing task.</p>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -353,7 +352,7 @@ def analyze_data():
                 st.plotly_chart(fig_sound, use_container_width=True)
 
         else:
-            st.warning("Ainda não há dados processados para análise.")
+            st.warning("There is no processed data available for analysis yet.")
 
         # Atualiza automaticamente a página a cada 30 segundos
         #now = datetime.datetime.now()
@@ -380,8 +379,8 @@ def plot_most_used_software(software_usage_time):
     fig = px.bar(
         x=top_software.index,
         y=top_software.values,
-        labels={"x": "Software", "y": "Tempo de Uso (min)"},
-        title="Tempo de Uso por Software",
+        labels={"x": "Software", "y": "Usage Time (min)"},
+        title="Software Usage Time",
         color=top_software.index,
         #color_discrete_sequence=px.colors.qualitative.Set2  # Paleta de cores Set2
         color_discrete_sequence=custom_colors_bar, 
@@ -397,7 +396,7 @@ def plot_most_used_software(software_usage_time):
 
     fig.update_layout(
         showlegend=False,
-        yaxis_title="Tempo (min)",
+        yaxis_title="Time (min)",
         xaxis_title="Softwares",
         xaxis_tickangle=0,
         yaxis=dict(
@@ -421,7 +420,7 @@ def plot_attention_pie_chart(grouped):
     Gera um gráfico de pizza mostrando a distribuição total de atenção e distração.
     """
     if grouped.empty:
-        st.warning("Nenhum dado disponível para análise de atenção.")
+        st.warning("No data available for attention analysis.")
         return None
 
     # Calcular médias gerais de atenção e distração
@@ -430,7 +429,7 @@ def plot_attention_pie_chart(grouped):
 
     # Criar um DataFrame para o gráfico
     pie_data = {
-        "Estado": ["Atento", "Distraído"],
+        "Estado": ["Attentive", "Distracted"],
         "Porcentagem": [total_atento, total_distraido]
     }
 
@@ -439,9 +438,9 @@ def plot_attention_pie_chart(grouped):
         pie_data,
         names="Estado",
         values="Porcentagem",
-        title="Distribuição de Atenção e Distração",
+        title="Distribution of Attention and Distraction",
         color="Estado",
-        color_discrete_map={"Atento": "#66C2A5", "Distraído": "#eb5f53"}  # Verde para atenção, vermelho para distração
+        color_discrete_map={"Attentive": "#66C2A5", "Distracted": "#eb5f53"}  # Verde para atenção, vermelho para distração
     )
 
     fig.update_traces(
@@ -475,12 +474,12 @@ def plot_sound_impact_chart(sound_impact_data):
     custom_colors_sound = ["#89A8B2", "#B3C8CF", "#E5E1DA", "#F1F0E8"]
 
     if sound_impact_data.empty:
-        st.warning("Nenhum dado disponível para o impacto do som na atenção.")
+        st.warning("No data available for sound impact analysis.")
         return None
 
     filtered_data = sound_impact_data[sound_impact_data["Distração Média (%)"] > 0]
     if filtered_data.empty:
-        st.warning("Nenhum som relevante foi identificado como impactando na atenção.")
+        st.warning("No relevant sounds were identified as affecting attention.")
         return None
 
     filtered_data = filtered_data.sort_values(by="Tempo Total do Som (min)", ascending=False)
@@ -493,7 +492,7 @@ def plot_sound_impact_chart(sound_impact_data):
         color="Som Predominante",
         color_discrete_sequence=custom_colors_sound,
         #color_discrete_sequence=px.colors.qualitative.Set2,  
-        title="Tempo Estimado dos Sons que Impactaram na Atenção",
+        title="Estimated Duration of Sounds Affecting Attention",
         text="Tempo Total do Som (min)",  
     )
 
@@ -505,8 +504,8 @@ def plot_sound_impact_chart(sound_impact_data):
     )
 
     fig.update_layout(
-        xaxis_title="Tempo Estimado (min)",
-        yaxis_title="Som Predominante",
+        xaxis_title="Estimated Duration (min)",
+        yaxis_title="Predominant Sound",
         height=320,  
         width=750,  
         margin=dict(t=30, b=30, l=50, r=10),  # Redução das margens
@@ -532,8 +531,8 @@ def main_dashboard():
     # Criar menu estilizado
     with st.sidebar:
         selected = option_menu(
-            menu_title="Menu Principal",  # Título do menu
-            options=["Configurar Preferências", "Iniciar Coleta de Dados", "Analisar Dados"],  # Opções do menu
+            menu_title="Main Menu",  # Título do menu
+            options=["Configure Preferences", "Start Data Collection", "Analyze Data"],  # Opções do menu
             icons=["gear", "cloud-download", "graph-up"],  # Ícones correspondentes
             menu_icon="display",  # Ícone do título
             default_index=0,  # Aba padrão selecionada
@@ -552,11 +551,11 @@ def main_dashboard():
 
 
         # Conteúdo de cada aba
-    if selected == "Configurar Preferências":
+    if selected == "Configure Preferences":
         configure_preferences()
-    elif selected == "Iniciar Coleta de Dados":
+    elif selected == "Start Data Collection":
         start_data_collection()
-    elif selected == "Analisar Dados":
+    elif selected == "Analyze Data":
         analyze_data()
 
 
