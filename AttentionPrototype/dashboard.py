@@ -279,7 +279,7 @@ def analyze_data():
                 mode="lines+markers",
                 marker=dict(size=8, color="black", opacity=0.6),
                 line=dict(width=2, color="black"),
-                name="Nível de Atenção",
+                name="Attention Level",
                 hoverinfo="skip"  # Isso remove o tooltip padrão da linha
             ))
 
