@@ -552,7 +552,7 @@ def main_dashboard():
     with st.sidebar:
         selected = option_menu(
             menu_title="Main Menu",  # Título do menu
-            options=["Configure Preferences", "Start Data Collection", "Analyze Data"],  # Opções do menu
+            options=["Preferences", "Start Data Collection", "Analyze Data"],  # Opções do menu
             icons=["gear", "cloud-download", "graph-up"],  # Ícones correspondentes
             menu_icon="display",  # Ícone do título
             default_index=0,  # Aba padrão selecionada
@@ -571,7 +571,7 @@ def main_dashboard():
 
 
         # Conteúdo de cada aba
-    if selected == "Configure Preferences":
+    if selected == "Preferences":
         configure_preferences()
     elif selected == "Start Data Collection":
         start_data_collection()
