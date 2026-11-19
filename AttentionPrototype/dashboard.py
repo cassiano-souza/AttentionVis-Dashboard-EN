@@ -337,11 +337,11 @@ def analyze_data():
                 """
                 <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
                     <h4 style="font-size: 16px;">Attention State Classification</h4>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #1B9E77; font-weight: bold;">Atenção Sustentada:</span> Maintaining focus on an activity over an extended period without significant interruptions.</p>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #8DA0CB; font-weight: bold;">Atenção Alternada:</span> The ability to shift focus between different tasks while maintaining efficiency.</p>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #FFD92F; font-weight: bold;">Atenção Seletiva:</span> The ability to focus on a specific stimulus despite distractions in the environment.</p>
-                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #66C2A5; font-weight: bold;">Atenção:</span> An adequate level of focus on the main activity, without frequent shifts or external interference.</p>
-                    <p style="font-size: 13px;"><span style="color: #eb5f53; font-weight: bold;">Distração:</span> Loss of attention due to external factors or difficulty maintaining engagement in the ongoing task.</p>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #1B9E77; font-weight: bold;">Sustained Attention:</span> Maintaining focus on an activity over an extended period without significant interruptions.</p>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #8DA0CB; font-weight: bold;">Alternating Attention:</span> The ability to shift focus between different tasks while maintaining efficiency.</p>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #FFD92F; font-weight: bold;">Selective Attention:</span> The ability to focus on a specific stimulus despite distractions in the environment.</p>
+                    <p style="font-size: 13px; margin: 10px 0;"><span style="color: #66C2A5; font-weight: bold;">Attention:</span> An adequate level of focus on the main activity, without frequent shifts or external interference.</p>
+                    <p style="font-size: 13px;"><span style="color: #eb5f53; font-weight: bold;">Distraction:</span> Loss of attention due to external factors or difficulty maintaining engagement in the ongoing task.</p>
                 </div>
                 """,
                 unsafe_allow_html=True
