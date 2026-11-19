@@ -71,9 +71,29 @@ def configure_preferences():
         st.subheader("Tools Selection")
         st.write("Select the software applications, organized by category, that you consider useful for work or study:")
         focus_apps = []
+
+        category_translations = {
+            "Produtividade": "Productivity",
+            "Documentos": "Documents",
+            "Reuniões": "Meetings",
+            "Entretenimento": "Entertainment",
+            "Redes Sociais": "Social Media",
+            "Educação": "Education"
+        }
+
         for category, details in software_categories.items():
-            st.markdown(f"<p style='color: #000000; font-size: 15px; font-weight: bold;'>{category}</p>", unsafe_allow_html=True)
-            selected_apps_focus = st.multiselect(details["description"] + ":", details["apps"])
+            category_label = category_translations.get(category, category)
+
+            st.markdown(
+                f"<p style='color: #000000; font-size: 15px; font-weight: bold;'>{category_label}</p>",
+                unsafe_allow_html=True
+            )
+
+            selected_apps_focus = st.multiselect(
+                details["description"] + ":",
+                details["apps"]
+            )
+
             focus_apps.extend(selected_apps_focus)
         
     
