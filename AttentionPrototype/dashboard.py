@@ -20,27 +20,27 @@ PID_FILE = "process.pid"  # Arquivo para salvar o PID do processo de coleta
 # Dicionário com categorias, softwares e descrições
 software_categories = {
     "Produtividade": {
-        "description": "Softwares usados para escrever e depurar código",
+        "description": "Software used for coding and debugging",
         "apps": ["Visual Studio Code", "PyCharm", "Eclipse", "ChatGPT", "GitHub Desktop"]
     },
     "Documentos": {
-        "description": "Ferramentas para criar, visualizar e editar documentos",
+        "description": "Tools for creating, viewing, and editing documents",
         "apps": ["Microsoft Word", "Microsoft Powerpoint", "Microsoft Excel", "Pré-Visualização", "Google Sheets", "Google Docs", "LaTeX"]
     },
     "Reuniões": {
-        "description": "Plataformas para videoconferências e colaboração online",
+        "description": "Platforms for video conferencing and online collaboration",
         "apps": ["Zoom", "Microsoft Teams", "Google Meet", "zoom.us"]
     },
     "Entretenimento": {
-        "description": "Plataformas de streaming e jogos",
+        "description": "Streaming and gaming platforms",
         "apps": ["YouTube", "Netflix", "Spotify", "Steam", "Epic Games Launcher", "Roblox"]
     },
     "Redes Sociais": {
-        "description": "Plataformas de redes sociais e mensagens",
+        "description": "Social media and messaging platforms",
         "apps": ["Facebook", "Instagram", "TikTok", "WhatsApp"]
     },
     "Educação": {
-        "description": "Plataformas e ferramentas educacionais",
+        "description": "Educational platforms and tools",
         "apps": ["Coursera", "Moodle", "Udemy"]
     }
 }
