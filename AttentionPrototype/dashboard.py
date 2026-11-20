@@ -14,6 +14,7 @@ import pandas as pd
 
 
 
+
 PID_FILE = "process.pid"  # Arquivo para salvar o PID do processo de coleta
 
 
