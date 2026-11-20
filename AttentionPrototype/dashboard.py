@@ -118,7 +118,7 @@ def configure_preferences():
         num_monitors = st.number_input("How many monitors do you use?", min_value=1, max_value=3, step=1, value=1)
         monitor_positions = {}
         for i in range(1, num_monitors + 1):
-            position = st.selectbox(f"Posição do Monitor {i}:", ["Front", "Left", "Right", "Above"], key=f"monitor-{i}")
+            position = st.selectbox(f"Monitor {i} position:", ["Front", "Left", "Right", "Above"], key=f"monitor-{i}")
             monitor_positions[f"Monitor {i}"] = position
         st.markdown("<br>", unsafe_allow_html=True)  # Quebras de linha
     
