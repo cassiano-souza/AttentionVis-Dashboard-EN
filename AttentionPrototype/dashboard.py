@@ -503,32 +503,12 @@ def plot_sound_impact_chart(sound_impact_data):
         st.warning("No relevant sounds were identified as affecting attention.")
         return None
 
-    # Tradução dos grupos de áudio exclusivamente para exibição
-    sound_group_translations = {
-        "Fala e Vozes": "Speech and Voices",
-        "Ruídos de Fundo Neutros": "Neutral Background Noise",
-        "Ruídos Intrusivos": "Intrusive Noise",
-        "Natureza e Ambiente": "Nature and Environment",
-        "Ruídos Mecânicos e Veiculares": "Mechanical and Vehicle Noise",
-        "Ambiente Silencioso": "Quiet Environment",
-        "Outros Sons": "Other Sounds",
-        "Não Classificado": "Unclassified",
-        "Irrelevante para Análise": "Not Relevant for Analysis"
-    }
-
-    # Criar uma cópia para apresentação, preservando os dados originais
-    display_data = filtered_data.copy()
     
-    display_data["Som Predominante"] = (
-        display_data["Som Predominante"]
-        .map(sound_group_translations)
-        .fillna(display_data["Som Predominante"])
-    )
 
     filtered_data = filtered_data.sort_values(by="Tempo Total do Som (min)", ascending=False)
 
     fig = px.bar(
-        display_data,
+        filtered_data,
         x="Tempo Total do Som (min)",
         y="Som Predominante",
         orientation="h",
