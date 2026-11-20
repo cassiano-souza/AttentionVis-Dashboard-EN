@@ -260,6 +260,43 @@ def analyze_data():
             attention_levels = data["Atento (%)"]
             attention_types = data["Tipo de Atenção"]
 
+            # Traduções utilizadas exclusivamente nos tooltips
+            state_translations = {
+                "Atento": "Attentive",
+                "Distraído": "Distracted"
+            }
+            
+            head_position_translations = {
+                "Olhando para Frente": "Looking Forward",
+                "Olhando para a Esquerda": "Looking Left",
+                "Olhando para a Direita": "Looking Right",
+                "Olhando para Cima": "Looking Up",
+                "Olhando para Baixo": "Looking Down",
+                "Sem Detecção de Rosto": "No Face Detected"
+            }
+            
+            sound_translations = {
+                "Música": "Music",
+                "Fala e Vozes": "Speech and Voices",
+                "Ruídos de Fundo Neutros": "Neutral Background Noise",
+                "Ruídos Intrusivos": "Intrusive Noise",
+                "Natureza e Ambiente": "Nature and Environment",
+                "Ruídos Mecânicos e Veiculares": "Mechanical and Vehicle Noise",
+                "Ambiente Silencioso": "Quiet Environment",
+                "Outros Sons": "Other Sounds",
+                "Não Classificado": "Unclassified",
+                "Irrelevante para Análise": "Not Relevant for Analysis"
+            }
+            
+            attention_type_translations = {
+                "Atenção": "Attention",
+                "Atenção Alternada": "Alternating Attention",
+                "Atenção Sustentada": "Sustained Attention",
+                "Atenção Seletiva": "Selective Attention",
+                "Distração": "Distraction",
+                "Neutro": "Neutral"
+            }
+
             attention_colors = {
                 "Atenção": "#66C2A5",  # Verde suave
                 "Atenção Alternada": "#8DA0CB",  # Azul lavanda
@@ -302,13 +339,37 @@ def analyze_data():
                 print(f"Plotando ponto -> Timestamp: {timestamp}, Atento (%): {porcentagem_atencao}, Tipo: {tipo_atencao}")
 
                 # Criar tooltip com detalhes do bloco de tempo
+                # Traduzir valores exclusivamente para exibição no tooltip
+                estado_exibicao = state_translations.get(
+                    estado.split(" (")[0],
+                    estado.split(" (")[0]
+                )
+                
+                estado_exibicao = f"{estado_exibicao} ({estado.split(' (')[1]}" if " (" in estado else estado_exibicao
+                
+                posicao_exibicao = head_position_translations.get(
+                    data.iloc[i]["Posição Cabeça Mais Comum"],
+                    data.iloc[i]["Posição Cabeça Mais Comum"]
+                )
+                
+                som_exibicao = sound_translations.get(
+                    data.iloc[i]["Som Predominante"],
+                    data.iloc[i]["Som Predominante"]
+                )
+                
+                tipo_exibicao = attention_type_translations.get(
+                    tipo_atencao,
+                    tipo_atencao
+                )
+                
+                # Criar tooltip em inglês
                 detalhes = (
                     f"⏰ {timestamp.strftime('%H:%M:%S')}<br>"
-                    f"🎯 State: {estado}<br>"
+                    f"🎯 State: {estado_exibicao}<br>"
                     f"💻 Most Used Software: {data.iloc[i]['Software Mais Usado']}<br>"
-                    f"👀 Most Frequent Head Position: {data.iloc[i]['Posição Cabeça Mais Comum']}<br>"
-                    f"🔊 Predominant Sound: {data.iloc[i]['Som Predominante']}<br>"
-                    f"🏷️ Attention Type: {tipo_atencao}"
+                    f"👀 Most Frequent Head Position: {posicao_exibicao}<br>"
+                    f"🔊 Predominant Sound: {som_exibicao}<br>"
+                    f"🏷️ Attention Type: {tipo_exibicao}"
                 )
 
                 # Adicionar ponto ao gráfico com tooltip
