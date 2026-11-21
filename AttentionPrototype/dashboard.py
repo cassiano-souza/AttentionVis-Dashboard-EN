@@ -4,6 +4,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from attention_rules import process_attention_data  # processar dados de atenção
 from attention_rules import get_latest_csv
+from attention_rules import load_user_preferences
 import subprocess
 import os
 import signal
@@ -48,27 +49,99 @@ software_categories = {
 
 # 1. Página de Configuração de Preferências
 def configure_preferences():
+
+    # Carregar preferências existentes
+    saved_preferences = load_user_preferences()
+
+    saved_focus_apps = saved_preferences.get("Foco", [])
+    saved_context = saved_preferences.get("Contexto", {})
+    saved_monitors = saved_preferences.get("Monitores", {})
+    saved_urls = saved_preferences.get("FocoURLs", [])
+
+    # Tradução entre interface e valores internos
+    position_to_json = {
+        "Front": "Frente",
+        "Left": "Esquerda",
+        "Right": "Direita",
+        "Above": "Acima"
+    }
+
+    position_to_ui = {
+        "Frente": "Front",
+        "Esquerda": "Left",
+        "Direita": "Right",
+        "Acima": "Above"
+    }
+
+    music_to_json = {
+        "It helps me concentrate": "Me ajuda a concentrar",
+        "It distracts me": "Me distrai",
+        "It does not affect my focus": "Não afeta meu foco"
+    }
+
+    music_to_ui = {
+        "Me ajuda a concentrar": "It helps me concentrate",
+        "Me distrai": "It distracts me",
+        "Não afeta meu foco": "It does not affect my focus"
+    }
+
+    music_options = [
+        "It helps me concentrate",
+        "It distracts me",
+        "It does not affect my focus"
+    ]
+
+    saved_music = saved_context.get(
+        "PreferenciaMusica",
+        "Não afeta meu foco"
+    )
+
+    # Compatibilidade caso o JSON tenha valores antigos em inglês
+    if saved_music in music_options:
+        music_default = saved_music
+    else:
+        music_default = music_to_ui.get(
+            saved_music,
+            "It does not affect my focus"
+        )
+
+    # Número de monitores já configurados
+    num_monitors_default = max(1, len(saved_monitors))
+
     st.title("Preference Settings")
+
     st.markdown(
         """
-        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px;">
-            <p style="font-size: 13px; margin: 10px 0;">On this page, you can:</p>
+        <div style="background-color: #f8f9fa; padding: 15px;
+        border-radius: 8px; margin-top: 20px;">
+            <p style="font-size: 13px; margin: 10px 0;">
+                On this page, you can:
+            </p>
             <ul style="font-size: 13px; padding-left: 20px;">
-                <li>Select the software applications you consider useful for work or study (<b>Attentional Focus</b>).</li>
-                <li>Configure headphone use and define how <b>music</b> affects your concentration.</li>
-                <li>Configure your monitor arrangement to improve the analysis of <b>head position</b>.</li>
+                <li>Select the software applications you consider useful
+                for work or study (<b>Attentional Focus</b>).</li>
+                <li>Configure headphone use and define how
+                <b>music</b> affects your concentration.</li>
+                <li>Configure your monitor arrangement to improve
+                the analysis of <b>head position</b>.</li>
             </ul>
         </div>
         """,
         unsafe_allow_html=True
     )
-    
-    # Cria duas colunas
+
     col1, col2 = st.columns(2)
-    
+
+    # Coluna 1: Softwares
     with col1:
+
         st.subheader("Tools Selection")
-        st.write("Select the software applications, organized by category, that you consider useful for work or study:")
+
+        st.write(
+            "Select the software applications, organized by category, "
+            "that you consider useful for work or study:"
+        )
+
         focus_apps = []
 
         category_translations = {
@@ -81,61 +154,160 @@ def configure_preferences():
         }
 
         for category, details in software_categories.items():
-            category_label = category_translations.get(category, category)
+
+            category_label = category_translations.get(
+                category,
+                category
+            )
 
             st.markdown(
-                f"<p style='color: #000000; font-size: 15px; font-weight: bold;'>{category_label}</p>",
+                f"<p style='color: #000000; font-size: 15px; "
+                f"font-weight: bold;'>{category_label}</p>",
                 unsafe_allow_html=True
             )
 
+            # Recuperar somente os aplicativos pertencentes à categoria
+            selected_defaults = [
+                app for app in saved_focus_apps
+                if app in details["apps"]
+            ]
+
             selected_apps_focus = st.multiselect(
                 details["description"] + ":",
-                details["apps"]
+                details["apps"],
+                default=selected_defaults
             )
 
             focus_apps.extend(selected_apps_focus)
-        
-    
-    with col2:
-        st.subheader("Website Domains")
-        st.write("If you use Safari for work or study, add the allowed domains below (e.g., openai.com, google.com).")
-        focus_urls = st.text_area("Enter domains separated by commas:", "").split(",")
-        
-        st.markdown("<br><br>", unsafe_allow_html=True)  # Quebras de linha
 
-        st.subheader("Context")
-        is_using_headphones = st.checkbox("I am using headphones", value=False)
-        music_preference = st.radio(
-            "How does music affect your focus?",
-            options=["It helps me concentrate", "It distracts me", "It does not affect my focus"],
-            index=2
+        # Preservar eventuais aplicativos antigos que não estejam
+        # atualmente listados nas categorias da interface
+        all_available_apps = [
+            app
+            for details in software_categories.values()
+            for app in details["apps"]
+        ]
+
+        for app in saved_focus_apps:
+            if app not in all_available_apps:
+                focus_apps.append(app)
+
+    # Coluna 2: Domínios, contexto e monitores
+    with col2:
+
+        st.subheader("Website Domains")
+
+        st.write(
+            "If you use Safari for work or study, add the allowed "
+            "domains below (e.g., openai.com, google.com)."
         )
 
-        st.markdown("<br><br>", unsafe_allow_html=True)  # Quebras de linha
-    
+        focus_urls_text = st.text_area(
+            "Enter domains separated by commas:",
+            value=", ".join(saved_urls)
+        )
+
+        st.markdown("<br><br>", unsafe_allow_html=True)
+
+        st.subheader("Context")
+
+        is_using_headphones = st.checkbox(
+            "I am using headphones",
+            value=saved_context.get("UsandoFones", False)
+        )
+
+        music_preference = st.radio(
+            "How does music affect your focus?",
+            options=music_options,
+            index=music_options.index(music_default)
+        )
+
+        st.markdown("<br><br>", unsafe_allow_html=True)
+
         st.subheader("Monitors")
-        num_monitors = st.number_input("How many monitors do you use?", min_value=1, max_value=3, step=1, value=1)
+
+        num_monitors = st.number_input(
+            "How many monitors do you use?",
+            min_value=1,
+            max_value=3,
+            step=1,
+            value=min(num_monitors_default, 3)
+        )
+
         monitor_positions = {}
-        for i in range(1, num_monitors + 1):
-            position = st.selectbox(f"Monitor {i} position:", ["Front", "Left", "Right", "Above"], key=f"monitor-{i}")
-            monitor_positions[f"Monitor {i}"] = position
-        st.markdown("<br>", unsafe_allow_html=True)  # Quebras de linha
-    
-    # Botão para salvar as preferências (fora das colunas para centralizar)
+
+        for i in range(1, int(num_monitors) + 1):
+
+            monitor_name = f"Monitor {i}"
+
+            saved_position = saved_monitors.get(
+                monitor_name,
+                "Frente"
+            )
+
+            position_default = position_to_ui.get(
+                saved_position,
+                "Front"
+            )
+
+            position_options = [
+                "Front",
+                "Left",
+                "Right",
+                "Above"
+            ]
+
+            position = st.selectbox(
+                f"Monitor {i} position:",
+                position_options,
+                index=position_options.index(position_default),
+                key=f"monitor-{i}"
+            )
+
+            # Converter para português antes de salvar
+            monitor_positions[monitor_name] = position_to_json[position]
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+    # Botão para salvar as preferências
     col1_center, col2_center, col3_center = st.columns(3)
+
     with col2_center:
+
         if st.button("Save Preferences"):
+
+            # Converter a preferência musical para português
+            music_preference_json = music_to_json[music_preference]
+
+            # Separar e limpar os domínios
+            focus_urls = [
+                url.strip()
+                for url in focus_urls_text.split(",")
+                if url.strip()
+            ]
+
             preferences = {
                 "Monitores": monitor_positions,
                 "Foco": focus_apps,
                 "Contexto": {
                     "UsandoFones": is_using_headphones,
-                    "PreferenciaMusica": music_preference
+                    "PreferenciaMusica": music_preference_json
                 },
-                "FocoURLs": [url.strip() for url in focus_urls if url.strip()]
+                "FocoURLs": focus_urls
             }
-            with open("user_preferences.json", "w") as f:
-                json.dump(preferences, f, indent=4)
+
+            with open(
+                "user_preferences.json",
+                "w",
+                encoding="utf-8"
+            ) as f:
+                json.dump(
+                    preferences,
+                    f,
+                    indent=4,
+                    ensure_ascii=False
+                )
+
             st.success("Preferences saved successfully!")
 
 
