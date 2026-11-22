@@ -743,6 +743,7 @@ def plot_sound_impact_chart(sound_impact_data):
 
     # Tradução dos grupos de áudio exclusivamente para exibição
     sound_group_translations = {
+        "Música": "Music",
         "Fala e Vozes": "Speech and Voices",
         "Ruídos de Fundo Neutros": "Neutral Background Noise",
         "Ruídos Intrusivos": "Intrusive Noise",
