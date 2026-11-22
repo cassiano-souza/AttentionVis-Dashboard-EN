@@ -759,8 +759,10 @@ def plot_sound_impact_chart(sound_impact_data):
     
     display_data["Som Predominante"] = (
         display_data["Som Predominante"]
+        .astype(str)
+        .str.strip()
         .map(sound_group_translations)
-        .fillna(display_data["Som Predominante"])
+        .fillna(display_data["Som Predominante"].astype(str).str.strip())
     )
 
     filtered_data = filtered_data.sort_values(by="Tempo Total do Som (min)", ascending=False)
