@@ -704,8 +704,13 @@ def plot_attention_pie_chart(grouped):
     )
 
     fig.update_layout(
-        margin=dict(t=60),  # Margens uniformes
-        showlegend=True,  # Exibir legenda
+        fig.update_layout(
+        margin=dict(t=60, l=0, r=0),
+        title=dict(
+            x=0.5,
+            xanchor="center"
+        ),
+        showlegend=True,
         legend=dict(
             orientation="h",  # Legenda horizontal
             yanchor="bottom",  # Ancorar na parte inferior
