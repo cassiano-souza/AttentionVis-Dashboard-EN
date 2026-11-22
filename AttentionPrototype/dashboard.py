@@ -13,6 +13,19 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 
+st.set_page_config(layout="wide")
+
+st.markdown("""
+    <style>
+        .block-container {
+            max-width: 1800px;
+            width: 95%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 
 PID_FILE = "process.pid"  # Arquivo para salvar o PID do processo de coleta
 
