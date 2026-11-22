@@ -22,7 +22,7 @@ def get_latest_csv():
     #csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_19-44-27.csv")
     #csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_18-54-26.csv")
     #csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_13-19-13.csv")
-    csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_11-21-20.csv")
+    csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_10-03-40.csv")
     
     if os.path.exists(csv_path):
         return csv_path
