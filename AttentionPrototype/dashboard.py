@@ -630,14 +630,14 @@ def plot_most_used_software(software_usage_time):
         "Pré-Visualização": "Preview"
     }
 
-display_software = top_software.rename(index=software_translations)
+    display_software = top_software.rename(index=software_translations)
 
     # Cores alternativas da paleta Set2 que não conflitam com o gráfico principal
     custom_colors_bar = ["#89A8B2", "#B3C8CF", "#E5E1DA", "#F1F0E8"]
 
     fig = px.bar(
-        x=top_software.index,
-        y=top_software.values,
+        x=display_software.index,
+        y=display_software.values,
         labels={"x": "Software", "y": "Usage Time (min)"},
         title="Software Usage Time",
         color=top_software.index,
