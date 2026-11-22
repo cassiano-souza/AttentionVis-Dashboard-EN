@@ -21,7 +21,7 @@ def get_latest_csv():
     """Retorna um CSV específico para garantir a execução correta no Streamlit Cloud."""
     #csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_19-44-27.csv")
     #csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_18-54-26.csv")
-    csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_18-13-52.csv")
+    csv_path = os.path.join(CSV_DIRECTORY, "RawMultimodalData_2025-02-16_15-32-42.csv")
     
     if os.path.exists(csv_path):
         return csv_path
