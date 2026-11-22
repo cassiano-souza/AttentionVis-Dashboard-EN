@@ -636,8 +636,8 @@ display_software = top_software.rename(index=software_translations)
     custom_colors_bar = ["#89A8B2", "#B3C8CF", "#E5E1DA", "#F1F0E8"]
 
     fig = px.bar(
-        x=display_software.index,
-        y=display_software.values,
+        x=top_software.index,
+        y=top_software.values,
         labels={"x": "Software", "y": "Usage Time (min)"},
         title="Software Usage Time",
         color=top_software.index,
