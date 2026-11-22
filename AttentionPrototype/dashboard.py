@@ -691,7 +691,7 @@ def plot_attention_pie_chart(grouped):
         pie_data,
         names="Estado",
         values="Porcentagem",
-        title="Distribution of Attention and Distraction",
+        title="Distribution of Attention",
         color="Estado",
         color_discrete_map={"Attentive": "#66C2A5", "Distracted": "#eb5f53"}  # Verde para atenção, vermelho para distração
     )
@@ -704,11 +704,7 @@ def plot_attention_pie_chart(grouped):
     )
 
     fig.update_layout(
-        margin=dict(t=60, l=0, r=0),
-        title=dict(
-            x=0.5,
-            xanchor="center"
-        ),
+        margin=dict(t=60),
         showlegend=True,
         legend=dict(
             orientation="h",  # Legenda horizontal
