@@ -691,7 +691,7 @@ def plot_attention_pie_chart(grouped):
         pie_data,
         names="Estado",
         values="Porcentagem",
-        title="Distribution of Attention",
+        title="Attention Distribution",
         color="Estado",
         color_discrete_map={"Attentive": "#66C2A5", "Distracted": "#eb5f53"}  # Verde para atenção, vermelho para distração
     )
