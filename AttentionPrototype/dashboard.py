@@ -18,8 +18,8 @@ st.set_page_config(layout="wide")
 st.markdown("""
     <style>
         .block-container {
-            max-width: 1800px;
-            width: 95%;
+            max-width: 1500px;
+            width: 90%;
             padding-left: 2rem;
             padding-right: 2rem;
         }
