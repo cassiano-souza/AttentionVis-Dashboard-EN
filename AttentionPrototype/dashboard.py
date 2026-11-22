@@ -704,7 +704,6 @@ def plot_attention_pie_chart(grouped):
     )
 
     fig.update_layout(
-        fig.update_layout(
         margin=dict(t=60, l=0, r=0),
         title=dict(
             x=0.5,
